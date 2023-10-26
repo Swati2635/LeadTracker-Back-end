@@ -29,6 +29,7 @@ namespace LeadTracker.API.Extensions
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<ILeadService, LeadService>();
+            services.AddScoped<ILeadSourceService, LeadSourceService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IProjectDetailService, ProjectDetailService>();

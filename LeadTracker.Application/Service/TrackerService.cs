@@ -54,8 +54,7 @@ namespace LeadTracker.BusinessLayer.Service
             _mappingProfile.Map(tracker, existingTracker);
             await _trackerrepository.UpdateAsync(existingTracker);
 
-            //var track = _mappingProfile.Map<Tracker>(tracker);
-            //await _trackerrepository.UpdateAsync(track);
+            
         }
 
         public async Task DeleteTrackerAsync(int id)
@@ -119,6 +118,7 @@ namespace LeadTracker.BusinessLayer.Service
 
         //    return enquiryHistory;
         //}
+
 
 
     }

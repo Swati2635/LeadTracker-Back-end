@@ -1,4 +1,5 @@
-﻿using LeadTracker.Core.Entities;
+﻿using LeadTracker.API;
+using LeadTracker.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,14 @@ namespace LeadTracker.Infrastructure.IRepository
 {
     public interface IUserLocationRepository
     {
-        Task CreateUserLocationAsync(UserLocation location);
+        UserLocation GetUserLocation(int userId, int orgId);
+
+        void UpdateUserLocation(UserLocation location);
+
+        void CreateUserLocation(UserLocation location);
+
+        Task<List<UserLocation>> GetUserLocationsAsyncByOrgId(int orgId);
+
+       
     }
 }

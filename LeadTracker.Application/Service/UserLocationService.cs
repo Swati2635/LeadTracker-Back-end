@@ -17,29 +17,67 @@ namespace LeadTracker.BusinessLayer.Service
     public class UserLocationService : IUserLocationService
     {
         private readonly IUserLocationRepository _userLocationRepository;
-       
-        public UserLocationService(IUserLocationRepository userLocationRepository)
+        private readonly IMapper _mappingProfile;
+        private readonly IEmployeeRepository _employeeRepository;
+
+        public UserLocationService(IUserLocationRepository userLocationRepository, IMapper mappingProfile, IEmployeeRepository employeeRepository)
         {
             _userLocationRepository = userLocationRepository;
-           
+            _mappingProfile = mappingProfile;
+            _employeeRepository = employeeRepository;
         }
 
-        public async Task CreateUserLocation(UserLocationDTO userLocation , int userId, int orgId)
+
+
+
+        public async Task<UserLocationDTO> UpdateOrCreateUserLocation(UserLocationDTO userLocation, int userId, int orgId)
         {
+            var existingUserLocation = _userLocationRepository.GetUserLocation(userId, orgId);
 
-
-            UserLocation location = new UserLocation
+            if (existingUserLocation != null)
             {
-                UserId = userId,
-                CurrentLatitude = userLocation.CurrentLatitude,
-                CurrentLongitude = userLocation.CurrentLongitude,
-                OrgId = orgId,
-                Date = DateTime.UtcNow,
-                StartLatitude = userLocation.CurrentLatitude,
-                StartLongitude = userLocation.CurrentLongitude
-            };
+                
+                existingUserLocation.CurrentLatitude = userLocation.CurrentLatitude;
+                existingUserLocation.CurrentLongitude = userLocation.CurrentLongitude;
 
-            _userLocationRepository.CreateUserLocationAsync(location);
+                _userLocationRepository.UpdateUserLocation(existingUserLocation);
+            }
+            else
+            {
+                
+                UserLocation newLocation = new UserLocation
+                {
+                    UserId = userId,
+                    CurrentLatitude = userLocation.CurrentLatitude,
+                    CurrentLongitude = userLocation.CurrentLongitude,
+                    OrgId = orgId,
+                    Date = DateTime.UtcNow,
+                    StartLatitude = userLocation.CurrentLatitude,
+                    StartLongitude = userLocation.CurrentLongitude,
+                };
+
+                _userLocationRepository.CreateUserLocation(newLocation);
+            }
+
+            return userLocation; 
+        }
+
+        public async Task<IEnumerable<UserLocationResponseDTO>> GetAllUserLocationAsync(int orgId)
+        {
+            var userLocations = await _userLocationRepository.GetUserLocationsAsyncByOrgId(orgId);
+
+            var userLocationResponseDTOs = new List<UserLocationResponseDTO>();
+
+            foreach (var userLocation in userLocations)
+            {
+                var userLocationResponseDTO = _mappingProfile.Map<UserLocationResponseDTO>(userLocation);
+                userLocationResponseDTO.Employee = _mappingProfile.Map<EmployeeDTO>(
+                    await _employeeRepository.GetByIdAsync(userLocation.UserId ?? 0)
+                );
+                userLocationResponseDTOs.Add(userLocationResponseDTO);
+            }
+
+            return userLocationResponseDTOs;
         }
 
     }

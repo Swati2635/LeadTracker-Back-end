@@ -19,13 +19,32 @@ namespace LeadTracker.Infrastructure.Repository
             this._context = context;
         }
 
-
-        public async Task CreateUserLocationAsync(UserLocation location)
+        public UserLocation GetUserLocation(int userId, int orgId)
         {
-            await _context.UserLocations.AddAsync(location).ConfigureAwait(false);
-            await _context.SaveChangesAsync().ConfigureAwait(false);
+            return _context.UserLocations
+                .FirstOrDefault(ul => ul.UserId == userId && ul.OrgId == orgId);
         }
 
+        public void UpdateUserLocation(UserLocation location)
+        {
+            _context.UserLocations.Update(location);
+            _context.SaveChanges();
+        }
+
+        public void CreateUserLocation(UserLocation location)
+        {
+            _context.UserLocations.Add(location);
+            _context.SaveChanges();
+        }
+
+
+
+        public async Task<List<UserLocation>> GetUserLocationsAsyncByOrgId(int orgId)
+        {
+            return await _context.UserLocations
+                .Where(ul => ul.OrgId == orgId)
+                .ToListAsync();
+        }
 
     }
 }

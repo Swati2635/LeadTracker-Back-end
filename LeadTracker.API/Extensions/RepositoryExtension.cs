@@ -33,6 +33,8 @@ namespace LeadTracker.API.Extensions
 
             services.AddScoped<ILeadRepository, LeadRepository>();
 
+            services.AddScoped<ILeadSourceRepository, LeadSourceRepository>();
+
             services.AddScoped<ILocationRepository, LocationRepository>();
 
             services.AddScoped<IProjectRepository, ProjectRepository>();

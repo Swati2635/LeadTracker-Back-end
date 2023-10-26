@@ -46,7 +46,9 @@ namespace LeadTracker.Core.Extension
 
             CreateMap<TrackerDTO, Tracker>().ReverseMap();
 
-            CreateMap<UserLocationDTO, UserLocation>().ReverseMap();    
+            CreateMap<UserLocationDTO, UserLocation>().ReverseMap();
+
+            CreateMap<UserLocationResponseDTO, UserLocation>().ReverseMap();
 
             CreateMap<ZoneDTO, Zone>().ReverseMap();
 

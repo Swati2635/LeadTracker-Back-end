@@ -19,10 +19,12 @@ namespace LeadTracker.BusinessLayer.Service
     public class DocumentService : IDocumentService
     {
         private readonly IDocumentRepository _documentrepository;
+        private readonly ILogger<DocumentService> _logger;
 
-        public DocumentService(IDocumentRepository documentRepository)
+        public DocumentService(IDocumentRepository documentRepository, ILogger<DocumentService> logger)
         {
             _documentrepository= documentRepository;
+            _logger= logger;
         }
 
         public async Task CreateDocument(int userId, int orgId, DocumentDTO document)
@@ -51,10 +53,73 @@ namespace LeadTracker.BusinessLayer.Service
         }
 
 
+        public async Task InsertStatus(StatusDTO status, int orgId, int userId)
+        {
+            if (status.Files != null && status.Files.Count > 0)
+            {
+                var documents = new List<Document>(); 
+
+                foreach (var doc in status.Files)
+                {
+                    var outputFile = await WriteFile(doc);
+                    if (!string.IsNullOrEmpty(outputFile))
+                    {
+                        
+                        var document = new Document
+                        {
+                            EnquiryId = status.EnquiryId,
+                            TrackerId = status.TrackerId,
+                            ModuleType = status.ModuleType,
+                            Location = outputFile,
+                            Comment = status.Comment,
+                            WorkFlowId = status.WorkFlowId,
+                            WorkFlowStepId = status.CurrentWorkFlowStepId,
+                            OrgId = orgId,
+                            UserId = userId
+                        };
+
+                        documents.Add(document); 
+                    }
+                }
+
+                
+                await _documentrepository.CreateAllAsync(documents).ConfigureAwait(false);
+            }
+
+            
+            var tracker = new Tracker
+            {
+                EnquiryId = status.EnquiryId,
+                CodeId = status.ModuleType,
+                Remark = status.Comment,
+                Date = DateTime.UtcNow,
+                VisitExpected = null,
+                VisitExpectedDate = null,
+                VisitedProjectId = null,
+                VisitRemark = null,
+                AssignedTo = userId,
+                WorkFlowId = status.WorkFlowId,
+                WorkFlowStepId = status.NextWorkFlowStepId,
+                IsStepCompleted = false,
+                OrgId = orgId
+            };
+
+            await _documentrepository.CreateTracker(tracker);
+
+            if (status.Files != null)
+            {
+                foreach (var file in status.Files)
+                {
+                    await WriteFile(file);
+                }
+            }
+        }
+
+
+
 
         public async Task<string> WriteFile(IFormFile file)
         {
-
             string filename = "";
             try
             {
@@ -68,18 +133,49 @@ namespace LeadTracker.BusinessLayer.Service
                     Directory.CreateDirectory(filepath);
                 }
 
-                var outputFile = "Upload\\Files\\" + filename;
+                var outputFile = Path.Combine("Upload\\Files", filename);
                 var exactpath = Path.Combine(Directory.GetCurrentDirectory(), outputFile);
                 using (var stream = new FileStream(exactpath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
-                return outputFile;
+                return outputFile; 
             }
             catch (Exception ex)
             {
                 return null;
             }
         }
+
+
+        //public async Task<string> WriteFile(IFormFile file)
+        //{
+
+        //    string filename = "";
+        //    try
+        //    {
+        //        var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
+        //        filename = DateTime.Now.Ticks.ToString() + extension;
+
+        //        var filepath = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\Files");
+
+        //        if (!Directory.Exists(filepath))
+        //        {
+        //            Directory.CreateDirectory(filepath);
+        //        }
+
+        //        var outputFile = "Upload\\Files\\" + filename;
+        //        var exactpath = Path.Combine(Directory.GetCurrentDirectory(), outputFile);
+        //        using (var stream = new FileStream(exactpath, FileMode.Create))
+        //        {
+        //            await file.CopyToAsync(stream);
+        //        }
+        //        return outputFile;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
     }
 }

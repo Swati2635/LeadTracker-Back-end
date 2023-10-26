@@ -2,6 +2,7 @@
 using LeadTracker.Core.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata;
 
 namespace LeadTracker.API.Controllers
 {
@@ -27,5 +28,19 @@ namespace LeadTracker.API.Controllers
 
             return Ok(document);
         }
+
+        [HttpPost]
+        [Route("status")]
+        public async Task<ActionResult> UploadStatus([FromForm] StatusDTO status)
+        {
+            var userId = Convert.ToInt32(HttpContext.User.FindFirst(a => a.Type.Equals("EmployeeId")).Value);
+            var orgId = Convert.ToInt32(HttpContext.User.FindFirst(a => a.Type.Equals("OrgId")).Value);
+
+            await _documentService.InsertStatus(status, orgId, userId).ConfigureAwait(false);
+
+            return Ok(status);
+        }
+
+
     }
 }

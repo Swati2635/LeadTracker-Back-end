@@ -42,10 +42,8 @@ namespace LeadTracker.Infrastructure.Repository
 
         public async Task<IEnumerable<NextStepDTO>> GetNextStepsByCurrentStepAsync(string currentStep, int currentStepWFId, int orgId)
         {
-            
-            
             var nextSteps = await _context.WorkFlowSteps
-                .Where(wfs => wfs.OrgId == orgId && wfs.CurrentStep == currentStep && wfs.WorkFlowId == currentStepWFId)
+                .Where(wfs => wfs.OrgId == orgId && wfs.PreviousStep == currentStep && wfs.WorkFlowId == currentStepWFId)
                 .Select(wfs => new NextStepDTO { WorkFlowStepId = wfs.Id, WorkFlowId = wfs.WorkFlowId, NextStep = wfs.NextStep })
                 .ToListAsync()
                 .ConfigureAwait(false);

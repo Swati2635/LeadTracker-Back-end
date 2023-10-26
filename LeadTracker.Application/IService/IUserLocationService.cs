@@ -1,4 +1,5 @@
 ﻿using LeadTracker.Core.DTO;
+using LeadTracker.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,10 @@ namespace LeadTracker.BusinessLayer.IService
 {
     public interface IUserLocationService
     {
-        Task CreateUserLocation(UserLocationDTO userLocation, int userId, int orgId);
+        Task<UserLocationDTO> UpdateOrCreateUserLocation(UserLocationDTO userLocation, int userId, int orgId);
+
+        Task<IEnumerable<UserLocationResponseDTO>> GetAllUserLocationAsync(int orgId);
+
+        
     }
 }
