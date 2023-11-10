@@ -92,7 +92,7 @@ namespace LeadTracker.API.Controllers
 
             var _userId = Convert.ToInt32(HttpContext.User.FindFirst(a => a.Type.Equals("EmployeeId")).Value);
             var _orgId = Convert.ToInt32(HttpContext.User.FindFirst(a => a.Type.Equals("OrgId")).Value);
-            
+
             //var _orgId = Convert.ToInt32(HttpContext.Items["OrgId"]);
             //var _userId = Convert.ToInt32(HttpContext.Items["UserId"])
 
@@ -106,6 +106,7 @@ namespace LeadTracker.API.Controllers
 
             return Ok(enquiry);
         }
+
 
     }
 }

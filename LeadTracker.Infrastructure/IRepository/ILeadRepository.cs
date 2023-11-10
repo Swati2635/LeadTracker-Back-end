@@ -17,9 +17,11 @@ namespace LeadTracker.Infrastructure.IRepository
 
         Task<IEnumerable<Lead>> GetLeadsByEnquiryIdsAsync(List<int> enquiryIds);
 
-        Task<IEnumerable<Tracker>> GetLeadsByUserIdAndStepAsync(int userId, int orgId, List<int> workFlowStepIds, int take, int skip);
+        Task<IEnumerable<Tracker>> GetLeadsByUserIdAndStepAsync(int userId, int orgId, int workFlowStepId, int take, int skip);
 
-       // Task<string> GetCurrentStepByWorkFlowStepIdAsync(int workFlowStepId);
+        // Task<string> GetCurrentStepByWorkFlowStepIdAsync(int workFlowStepId);
+
+        Task<Lead> CreateLeadAsync(Lead lead);
 
     }
 }

@@ -31,10 +31,14 @@ public partial class Organisation : Identity
 
     public virtual ICollection<UserLocation> UserLocations { get; set; } = new List<UserLocation>();
 
+    public virtual ICollection<WorkFlowDetail> WorkFlowDetails { get; set; } = new List<WorkFlowDetail>();
+
     public virtual ICollection<WorkFlowStep> WorkFlowSteps { get; set; } = new List<WorkFlowStep>();
 
     public virtual ICollection<WorkFlow> WorkFlows { get; set; } = new List<WorkFlow>();
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
+
+  
 }
 

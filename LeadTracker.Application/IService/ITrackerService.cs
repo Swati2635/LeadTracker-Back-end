@@ -23,5 +23,7 @@ namespace LeadTracker.BusinessLayer.IService
 
         Task<EnquiryHistoryDTO> GetEnquiryHistoryByEnquiryIdAsync(int enquiryId);
 
+        Task<List<spStepCountDTO>> GetspCountsByUserIdAsync(int userId, int orgId);
+
     }
 }

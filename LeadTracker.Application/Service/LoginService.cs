@@ -41,7 +41,7 @@ namespace LeadTracker.BusinessLayer.Service
                 throw new KeyNotFoundException("Invalid User Details.");
             }
             var emp = _mappingProfile.Map<EmployeeDTO>(user);
-            emp.EmployeeId = user.Id;
+            emp.Id = user.Id;
 
             return emp;
         }

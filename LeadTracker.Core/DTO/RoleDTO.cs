@@ -8,7 +8,7 @@ namespace LeadTracker.Core.DTO
 {
     public class RoleDTO
     {
-        public int RoleId { get; set; }
+        public int Id { get; set; }
 
         public string? Name { get; set; }
 
@@ -26,6 +26,7 @@ namespace LeadTracker.Core.DTO
 
         public int? ModifiedBy { get; set; }
 
+        public int? ParentRoleId { get; set; }
 
     }
 }

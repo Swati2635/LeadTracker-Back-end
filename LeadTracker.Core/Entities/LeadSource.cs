@@ -4,13 +4,14 @@ using System.Collections.Generic;
 
 namespace LeadTracker.API;
 
-public partial class LeadSource
+public partial class LeadSource : Identity
 {
-    public int EnquiryId { get; set; }
+
+    
 
     public DateTime? Date { get; set; }
 
-    public string? LeadSource1 { get; set; }
+    public string? LeadsSource { get; set; }
 
     public string? LeadSourceProject { get; set; }
 
@@ -24,21 +25,14 @@ public partial class LeadSource
 
     public decimal? Budget { get; set; }
 
-    public string? Description { get; set; }
-
     public string? Status { get; set; }
 
-    public string? FinalRemark { get; set; }
+    public string? Remark { get; set; }
 
     public string? EnquiryType { get; set; }
 
-    public int? TrakerFlowId { get; set; }
+    public int? TrakerId { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool? IsProcessed { get; set; }
 
-    public bool? IsDeleted { get; set; }
-
-    public DateTime? CreatedDate { get; set; }
-
-    public DateTime? ModifiedDate { get; set; }
 }

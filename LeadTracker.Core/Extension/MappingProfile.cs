@@ -38,6 +38,8 @@ namespace LeadTracker.Core.Extension
 
             CreateMap<LeadDTO, Lead>().ReverseMap();
 
+            CreateMap<LeadSourceGetDTO, LeadSource>().ReverseMap();
+
             CreateMap<LocationDTO, Location>().ReverseMap();
 
             CreateMap<ProjectDTO, Project>().ReverseMap();
@@ -57,6 +59,9 @@ namespace LeadTracker.Core.Extension
             //CreateMap<WorkFlowStepDTO, WorkFlowStep>().ForMember(src => src.Id, opts => opts.MapFrom(dest => dest.WorkFlowStepId)).ReverseMap();
 
             CreateMap<WorkFlowStepDTO, WorkFlowStep>().ReverseMap();
+            CreateMap<AttendanceDTO, Attendance>().ReverseMap();
+
+
 
 
 

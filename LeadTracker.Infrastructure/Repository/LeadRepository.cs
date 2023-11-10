@@ -44,7 +44,7 @@ namespace LeadTracker.Infrastructure.Repository
 
 
 
-        public async Task<IEnumerable<Tracker>> GetLeadsByUserIdAndStepAsync(int userId, int orgId, List<int> workFlowStepIds, int take, int skip)
+        public async Task<IEnumerable<Tracker>> GetLeadsByUserIdAndStepAsync(int userId, int orgId, int workFlowStepId, int take, int skip)
         {
             bool? isStepCompleted = false;
 
@@ -53,7 +53,7 @@ namespace LeadTracker.Infrastructure.Repository
                 .Include(f => f.WorkFlowStep)
                 .Include(f => f.Enquiry)
                 .Where(f => f.IsStepCompleted == isStepCompleted && (!f.IsDeleted) && f.IsActive &&
-                f.WorkFlowStepId.HasValue && workFlowStepIds.Contains(f.WorkFlowStepId.Value) && f.AssignedTo == userId && f.OrgId == orgId)
+                f.WorkFlowStepId.HasValue && f.WorkFlowStepId.Value== workFlowStepId && f.AssignedTo == userId && f.OrgId == orgId)
                 .Skip(skip)
                 .Take(take)
                 .ToListAsync();
@@ -81,6 +81,21 @@ namespace LeadTracker.Infrastructure.Repository
                 .ConfigureAwait(false);
         }
 
+        public async Task<Lead> CreateLeadAsync(Lead lead)
+        {
+            try
+            {
+                await _context.Leads.AddAsync(lead); // Add the new Lead to the context
+                await _context.SaveChangesAsync(); // Save changes to the database asynchronously
+
+                return lead; // Return the created Lead entity
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions here, e.g., log the error or throw a custom exception
+                throw new Exception("Error creating Lead.", ex);
+            }
+        }
 
 
     }

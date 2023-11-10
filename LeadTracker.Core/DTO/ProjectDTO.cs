@@ -8,7 +8,7 @@ namespace LeadTracker.Core.DTO
 {
     public class ProjectDTO
     {
-        public int ProjectId { get; set; }
+        public int Id { get; set; }
 
         public string? ProjectName { get; set; }
 

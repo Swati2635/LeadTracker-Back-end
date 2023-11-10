@@ -38,8 +38,8 @@ namespace LeadTracker.Infrastructure
         public async Task CreateAsync(T entity)
         {
             entity.IsActive = true;
-            entity.CreatedDate = DateTime.UtcNow;
-            entity.ModifiedDate = DateTime.UtcNow;
+            entity.CreatedDate = DateTime.Now;
+            entity.ModifiedDate = DateTime.Now;
             entity.IsDeleted = false;
 
             await _context.Set<T>().AddAsync(entity).ConfigureAwait(false);
@@ -48,7 +48,7 @@ namespace LeadTracker.Infrastructure
 
         public async Task UpdateAsync(T entity)
         {
-            entity.ModifiedDate = DateTime.UtcNow;
+            entity.ModifiedDate = DateTime.Now;
             _context.Set<T>().Update(entity);
             await _context.SaveChangesAsync();
         }

@@ -38,6 +38,7 @@ namespace LeadTracker.API.Extensions
             services.AddScoped<IWorkFlowService, WorkFlowService>();
             services.AddScoped<IWorkFlowStepService, WorkFlowStepService>();
             services.AddScoped<IZoneService, ZoneService>();
+            services.AddScoped<IAttendanceService, AttendanceService>();
 
 
         }

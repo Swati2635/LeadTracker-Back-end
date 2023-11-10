@@ -14,7 +14,7 @@ public partial class Role : Identity
 
     public int? OrgId { get; set; }
 
-   
+    public int? ParentRoleId { get; set; }
 
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 
