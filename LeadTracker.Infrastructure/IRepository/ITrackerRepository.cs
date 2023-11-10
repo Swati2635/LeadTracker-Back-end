@@ -12,10 +12,10 @@ namespace LeadTracker.Infrastructure.IRepository
     public interface ITrackerRepository : IRepository<Tracker>
     {
         Task<IEnumerable<Tracker>> GetTrackersByEnquiryIdAsync(int enquiryId);
-
         Task<string> GetCurrentStepByWorkFlowStepIdAsync(int workFlowStepId);
-
         Task CreateTrackerAsync(Tracker entity);
+        List<spStepCountDTO> GetspCountsByUserIdandOrgIdAsync(int userId, int orgId);
+        Task<Tracker> CreateTrackerByLeadSourceAsync(Tracker tracker);
 
     }
 }

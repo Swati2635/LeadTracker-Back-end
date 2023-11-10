@@ -90,12 +90,12 @@ namespace LeadTracker.BusinessLayer.Service
             var tracker = new Tracker
             {
                 EnquiryId = status.EnquiryId,
+                VisitExpectedDate = status.VisitExpectedDate,
                 CodeId = status.ModuleType,
                 Remark = status.Comment,
                 Date = DateTime.UtcNow,
                 VisitExpected = null,
-                VisitExpectedDate = null,
-                VisitedProjectId = null,
+                VisitedProjectId = status.VisitedProjectId,
                 VisitRemark = null,
                 AssignedTo = userId,
                 WorkFlowId = status.WorkFlowId,
@@ -115,9 +115,6 @@ namespace LeadTracker.BusinessLayer.Service
             }
         }
 
-
-
-
         public async Task<string> WriteFile(IFormFile file)
         {
             string filename = "";
@@ -133,7 +130,7 @@ namespace LeadTracker.BusinessLayer.Service
                     Directory.CreateDirectory(filepath);
                 }
 
-                var outputFile = Path.Combine("Upload\\Files", filename);
+                var outputFile = Path.Combine("Upload\\Files\\" + file.FileName);
                 var exactpath = Path.Combine(Directory.GetCurrentDirectory(), outputFile);
                 using (var stream = new FileStream(exactpath, FileMode.Create))
                 {
@@ -146,36 +143,6 @@ namespace LeadTracker.BusinessLayer.Service
                 return null;
             }
         }
-
-
-        //public async Task<string> WriteFile(IFormFile file)
-        //{
-
-        //    string filename = "";
-        //    try
-        //    {
-        //        var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
-        //        filename = DateTime.Now.Ticks.ToString() + extension;
-
-        //        var filepath = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\Files");
-
-        //        if (!Directory.Exists(filepath))
-        //        {
-        //            Directory.CreateDirectory(filepath);
-        //        }
-
-        //        var outputFile = "Upload\\Files\\" + filename;
-        //        var exactpath = Path.Combine(Directory.GetCurrentDirectory(), outputFile);
-        //        using (var stream = new FileStream(exactpath, FileMode.Create))
-        //        {
-        //            await file.CopyToAsync(stream);
-        //        }
-        //        return outputFile;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return null;
-        //    }
-        //}
+        
     }
 }

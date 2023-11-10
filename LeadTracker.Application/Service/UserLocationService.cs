@@ -34,24 +34,24 @@ namespace LeadTracker.BusinessLayer.Service
         {
             var existingUserLocation = _userLocationRepository.GetUserLocation(userId, orgId);
 
-            if (existingUserLocation != null)
+            if (existingUserLocation != null && existingUserLocation.Date.Value.Date == DateTime.Now.Date)
             {
-                
+
                 existingUserLocation.CurrentLatitude = userLocation.CurrentLatitude;
                 existingUserLocation.CurrentLongitude = userLocation.CurrentLongitude;
-
+                existingUserLocation.Date = DateTime.Now;
                 _userLocationRepository.UpdateUserLocation(existingUserLocation);
             }
             else
             {
-                
+
                 UserLocation newLocation = new UserLocation
                 {
                     UserId = userId,
                     CurrentLatitude = userLocation.CurrentLatitude,
                     CurrentLongitude = userLocation.CurrentLongitude,
                     OrgId = orgId,
-                    Date = DateTime.UtcNow,
+                    Date = DateTime.Now,
                     StartLatitude = userLocation.CurrentLatitude,
                     StartLongitude = userLocation.CurrentLongitude,
                 };
@@ -59,7 +59,7 @@ namespace LeadTracker.BusinessLayer.Service
                 _userLocationRepository.CreateUserLocation(newLocation);
             }
 
-            return userLocation; 
+            return userLocation;
         }
 
         public async Task<IEnumerable<UserLocationResponseDTO>> GetAllUserLocationAsync(int orgId)

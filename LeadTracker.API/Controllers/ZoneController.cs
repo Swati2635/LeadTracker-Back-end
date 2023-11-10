@@ -22,7 +22,7 @@ namespace LeadTracker.API.Controllers
         public async Task<ActionResult> SaveZone(ZoneDTO zone)
         {
             await _zoneService.CreateZone(zone).ConfigureAwait(false);
-
+             
             return Ok(zone);
         }
 

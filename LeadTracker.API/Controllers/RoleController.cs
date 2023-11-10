@@ -50,7 +50,7 @@ namespace LeadTracker.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRole(int id, RoleDTO role)
         {
-            if (id != role.RoleId)
+            if (id != role.Id)
             {
                 return BadRequest();
             }

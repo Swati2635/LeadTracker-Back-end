@@ -81,7 +81,21 @@ namespace LeadTracker.API.Controllers
             return Ok(enquiryHistory);
         }
 
-        
+
+        [HttpGet("GetCountOfWorkFlowStep/{userId}")]
+        public async Task<ActionResult<List<spStepCountDTO>>> GetCountOfStepByUserId(int userId)
+        {
+            var _orgId = Convert.ToInt32(HttpContext.User.FindFirst(a => a.Type.Equals("OrgId")).Value);
+
+            var count = await _trackerService.GetspCountsByUserIdAsync(userId, _orgId).ConfigureAwait(false);
+
+            if (count == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(count);
+        }
 
     }
 }

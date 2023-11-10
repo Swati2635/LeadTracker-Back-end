@@ -106,4 +106,9 @@ public partial class Tracker : Identity
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
+   
+
+    public virtual Project? VisitedProject { get; set; }
+
+    
 }

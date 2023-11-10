@@ -15,7 +15,8 @@ namespace LeadTracker.Core.DTO
         [Required]
         public string? Password { get; set; }
 
-
+        [Required]
+        public string? DeviceId { get; set; }
 
     }
 }

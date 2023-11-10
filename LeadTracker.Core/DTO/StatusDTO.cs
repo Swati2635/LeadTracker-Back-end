@@ -17,6 +17,14 @@ namespace LeadTracker.Core.DTO
 
         public int? ModuleType { get; set; }
 
+
+
+        public DateTime? VisitExpectedDate { get; set; }
+
+        public int? VisitedProjectId { get; set; }
+
+
+
         public string? Comment { get; set; }
 
         public int? WorkFlowId { get; set; }
@@ -25,7 +33,7 @@ namespace LeadTracker.Core.DTO
 
         public int? NextWorkFlowStepId { get; set; }
 
-      
+        
 
     }
 }

@@ -11,17 +11,9 @@ namespace LeadTracker.Core.DTO
     {
         public int Id { get; set; }
 
-        public int? WorkFlowId { get; set; }
+        public int WorkFlowId { get; set; }
 
-        public string? PreviousStep { get; set; }
-
-        public string? CurrentStep { get; set; }
-
-        public string? NextStep { get; set; }
-
-        public bool? IsActive { get; set; }
-
-        public bool? IsDeleted { get; set; }
+        public string StepName { get; set; } = null!;
 
         public int? OrgId { get; set; }
 

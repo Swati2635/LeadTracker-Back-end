@@ -23,4 +23,6 @@ public partial class Project : Identity
     public virtual Location? Location { get; set; }
 
     public virtual ICollection<ProjectDetail> ProjectDetails { get; set; } = new List<ProjectDetail>();
+
+    public virtual ICollection<Tracker> Trackers { get; set; } = new List<Tracker>();
 }

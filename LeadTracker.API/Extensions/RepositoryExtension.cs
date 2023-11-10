@@ -50,6 +50,7 @@ namespace LeadTracker.API.Extensions
             services.AddScoped<IWorkFlowRepository, WorkFlowRepository>();
 
             services.AddScoped<IWorkFlowStepRepository, WorkFlowStepRepository>();
+            services.AddScoped<IAttendanceRepository, AttendanceRepository>();
         }
     }
 }

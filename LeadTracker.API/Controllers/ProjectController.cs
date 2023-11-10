@@ -49,7 +49,7 @@ namespace LeadTracker.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProject(int id, ProjectDTO project)
         {
-            if (id != project.ProjectId)
+            if (id != project.Id)
             {
                 return BadRequest();
             }

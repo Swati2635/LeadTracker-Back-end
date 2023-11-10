@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LeadTracker.API.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
@@ -29,6 +29,20 @@ namespace LeadTracker.API.Controllers
 
             return Ok(employee);
         }
+
+
+        [HttpPost("NewEmployee")]
+        public async Task<ActionResult> NewEmployeeRegistration(NewEmployeeDTO employee)
+        {
+            var _userId = Convert.ToInt32(HttpContext.User.FindFirst(a => a.Type.Equals("EmployeeId")).Value);
+            var _orgId = Convert.ToInt32(HttpContext.User.FindFirst(a => a.Type.Equals("OrgId")).Value);
+
+
+            await _employeeService.RegisterEmployee(employee, _orgId, _userId).ConfigureAwait(false);
+
+            return Ok(employee);
+        }
+
 
 
         [HttpGet("{id}")]
@@ -54,7 +68,7 @@ namespace LeadTracker.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEmployee(int id, EmployeeDTO employee)
         {
-            if (id != employee.EmployeeId)
+            if (id != employee.Id)
             {
                 return BadRequest();
             }
@@ -64,11 +78,109 @@ namespace LeadTracker.API.Controllers
         }
 
 
+        [HttpPut("UpdateEmployee/{id}")]
+        public async Task<IActionResult> UpdateEmployee(int id, NewEmployeeDTO updatedEmployee)
+        {
+            try
+            {
+                if (id != updatedEmployee.Id)
+                {
+                    return BadRequest("Invalid employee ID.");
+                }
+
+                var updatedEmployeeResult = await _employeeService.EditEmployeeAsync(id, updatedEmployee).ConfigureAwait(false);
+
+                if (updatedEmployeeResult != null)
+                {
+                    return Ok(updatedEmployeeResult);
+                }
+                else
+                {
+                    return NotFound("Employee not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to update employee: {ex.Message}");
+            }
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
             await _employeeService.DeleteEmployeeAsync(id).ConfigureAwait(false);
             return NoContent();
         }
+
+
+        [HttpGet("GetEmployeeAndChildren/{userId}")]
+        public async Task<ActionResult<List<spParentAndChildrenDTO>>> GetEmployeesByUserId(int userId)
+        {
+           
+            var _orgId = Convert.ToInt32(HttpContext.User.FindFirst(a => a.Type.Equals("OrgId")).Value);
+
+            var empls = await _employeeService.GetspEmployeesByUserIdAsync(userId, _orgId).ConfigureAwait(false);
+
+            if (empls == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(empls);
+        }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO changePassword)
+        {
+
+            var success = await _employeeService.ChangePasswordAsync(changePassword);
+
+            if (success)
+            {
+                return Ok(changePassword);
+            }
+            else
+            {
+                return BadRequest("Password change failed");
+            }
+        }
+
+
+        [HttpGet("GetParentOfUsers")]
+        public async Task<ActionResult<List<spParentDTO>>> GetParents()
+        {
+            //var _orgId = Convert.ToInt32(HttpContext.User.FindFirst(a => a.Type.Equals("OrgId")).Value);
+
+            var count = await _employeeService.GetspParentOfUsersAsync().ConfigureAwait(false);
+
+            if (count == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(count);
+        }
+
+
+        [HttpPost("GetActivitiesOfEmployees")]
+        public async Task<ActionResult<List<spGetActivitiesResponseDTO>>> GetActivities([FromBody] spGetActivitiesRequestDTO activities)
+        {
+            var activitiesDto = await _employeeService.GetspActivitiesAsync(activities).ConfigureAwait(false);
+
+            return Ok(activitiesDto);
+        }
+
+
+        [HttpPost("GetTimeLineOfActions")]
+        public async Task<ActionResult<List<spGetTimelineResponseDTO>>> GetTimeline([FromBody] spGetTimelineRequestDTO timeline)
+        {
+            var timelineDto = await _employeeService.GetTimelineAsync(timeline).ConfigureAwait(false);
+
+
+            return Ok(timelineDto);
+        }
+
+
     }
 }

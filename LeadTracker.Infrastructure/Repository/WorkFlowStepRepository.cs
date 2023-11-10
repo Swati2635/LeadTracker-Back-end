@@ -20,7 +20,7 @@ namespace LeadTracker.Infrastructure.Repository
                 .Where(workflow => workflow.OrgId == orgId).ToList();
 
             return workflow.FirstOrDefault();
-                
+
         }
 
         public async Task<IEnumerable<WorkFlowStep>> GetWorkFlowStepByOrgIdByIdAsync(int orgId)
@@ -31,20 +31,24 @@ namespace LeadTracker.Infrastructure.Repository
                 .ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<WorkFlowStep>> GetWorkFlowStepsByCurrentStepAsync(string currentStep, int orgId) 
+        public async Task<WorkFlowStep> GetWorkFlowStepsByCurrentStepAsync(string currentStep, int orgId)
         {
-
-            return await _context.WorkFlowSteps
-                .Where(workflowstep => workflowstep.OrgId == orgId && workflowstep.CurrentStep == currentStep)
-                .ToListAsync()
-                .ConfigureAwait(false);
+            return await _context.WorkFlowSteps.FirstOrDefaultAsync(f=>f.StepName== currentStep && f.OrgId == orgId).ConfigureAwait(false);
         }
+
+
+
 
         public async Task<IEnumerable<NextStepDTO>> GetNextStepsByCurrentStepAsync(string currentStep, int currentStepWFId, int orgId)
         {
-            var nextSteps = await _context.WorkFlowSteps
-                .Where(wfs => wfs.OrgId == orgId && wfs.PreviousStep == currentStep && wfs.WorkFlowId == currentStepWFId)
-                .Select(wfs => new NextStepDTO { WorkFlowStepId = wfs.Id, WorkFlowId = wfs.WorkFlowId, NextStep = wfs.NextStep })
+            var nextSteps = await _context.WorkFlowDetails
+                .Include(f => f.WorkFlowPreviousStep)
+                .Include(f => f.WorkFlowCurrentStep)
+                .Include(f => f.WorkFlowNextStep)
+                .Where(wfs => wfs.OrgId == orgId && wfs.WorkFlowCurrentStep.StepName == currentStep && wfs.WorkFlowId == currentStepWFId)
+                .Select(wfs => wfs.WorkFlowNextStep)
+                .Distinct()
+                .Select(nextStep => new NextStepDTO { WorkFlowId = currentStepWFId, NextStep = nextStep.StepName, WorkFlowStepId = nextStep.Id})
                 .ToListAsync()
                 .ConfigureAwait(false);
 

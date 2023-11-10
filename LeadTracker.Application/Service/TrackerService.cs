@@ -82,7 +82,7 @@ namespace LeadTracker.BusinessLayer.Service
                 Trackers = _mappingProfile.Map<List<TrackerDTO>>(trackers).ToList()
             };
 
-            
+
             foreach (var tracker in enquiryHistory.Trackers)
             {
                 string currentStep = await _trackerrepository.GetCurrentStepByWorkFlowStepIdAsync(tracker.WorkFlowStepId ?? 0).ConfigureAwait(false);
@@ -90,6 +90,22 @@ namespace LeadTracker.BusinessLayer.Service
             }
 
             return enquiryHistory;
+        }
+
+
+
+        public async Task<List<spStepCountDTO>> GetspCountsByUserIdAsync(int userId, int orgId)
+        {
+            var stepCount = _trackerrepository.GetspCountsByUserIdandOrgIdAsync(userId, orgId);
+
+            if (stepCount == null)
+            {
+                return null;
+            }
+
+            var StepCount = _mappingProfile.Map<List<spStepCountDTO>>(stepCount).ToList();
+            
+            return StepCount;
         }
 
 

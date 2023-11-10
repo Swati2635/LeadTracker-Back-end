@@ -109,8 +109,8 @@ namespace LeadTracker.BusinessLayer.Service
         public async Task<IEnumerable<TrackerDTO>> GetEnquiriesByCurrentStepAsync(int userId, int orgId, string currentStep, int take, int skip)
         {
             
-            var workflowSteps = await _workFlowStepRepository.GetWorkFlowStepsByCurrentStepAsync(currentStep, orgId);
-            var trackers = await _leadRepository.GetLeadsByUserIdAndStepAsync(userId, orgId, workflowSteps.Select(f => f.Id).ToList(), take, skip).ConfigureAwait(false);
+            var workflowStep = await _workFlowStepRepository.GetWorkFlowStepsByCurrentStepAsync(currentStep, orgId);
+            var trackers = await _leadRepository.GetLeadsByUserIdAndStepAsync(userId, orgId,workflowStep.Id, take, skip).ConfigureAwait(false);
 
             var trackerDTOs = _mappingProfile.Map<List<TrackerDTO>>(trackers);
 

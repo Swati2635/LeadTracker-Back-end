@@ -8,7 +8,7 @@ namespace LeadTracker.Core.DTO
 {
     public class EmployeeDTO
     {
-        public int EmployeeId { get; set; }
+        public int Id { get; set; }
 
         public string? Name { get; set; }
 
@@ -41,5 +41,9 @@ namespace LeadTracker.Core.DTO
         public string? Gender { get; set; }
 
         public int? RoleId { get; set; }
+
+        public byte[]? Photo { get; set; }
+
+        public string? DeviceId { get; set; }
     }
 }
